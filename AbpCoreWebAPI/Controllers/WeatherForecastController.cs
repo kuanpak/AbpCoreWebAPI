@@ -10,16 +10,20 @@ namespace AbpCoreWebAPI.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        };
+        
+        
 
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IDummyAppService _dummyService;
+        private readonly IConfiguration configuration;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IDummyAppService dummyService)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IDummyAppService dummyService, IConfiguration configuration)
         {
             _logger = logger;
             _dummyService = dummyService;
+            this.configuration = configuration;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
@@ -31,9 +35,10 @@ namespace AbpCoreWebAPI.Controllers
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)] + " " + configuration["dummy"]
             })
             .ToArray();
         }
+
     }
 }
